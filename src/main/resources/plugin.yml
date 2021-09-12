@@ -7,4 +7,11 @@ authors: [ Ruben ]
 commands:
   cash:
     aliases: [money]
-  change:
+  pay:
+  eco:
+  bank:
+  adminprofile:
+    aliases: [aprofile]
+  getstorage:
+  storageUpgradeItem:
+  testench:

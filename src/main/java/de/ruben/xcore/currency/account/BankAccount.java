@@ -1,6 +1,7 @@
 package de.ruben.xcore.currency.account;
 
-import de.ruben.xcore.profile.model.Transaction;
+
+import de.ruben.xcore.currency.account.type.Transaction;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,12 +11,14 @@ public class BankAccount {
     private List<Transaction> transactions;
     private List<UUID> accessGrantedAccounts;
     private List<UUID> accessGrantedPlayers;
+    private boolean frozen;
 
-    public BankAccount(Double value, List<Transaction> transactions, List<UUID> accessGrantedAccounts, List<UUID> accessGrantedPlayers) {
+    public BankAccount(Double value, List<Transaction> transactions, List<UUID> accessGrantedAccounts, List<UUID> accessGrantedPlayers, boolean frozen) {
         this.value = value;
         this.transactions = transactions;
         this.accessGrantedAccounts = accessGrantedAccounts;
         this.accessGrantedPlayers = accessGrantedPlayers;
+        this.frozen = frozen;
     }
 
     public BankAccount() {
@@ -51,5 +54,13 @@ public class BankAccount {
 
     public void setAccessGrantedPlayers(List<UUID> accessGrantedPlayers) {
         this.accessGrantedPlayers = accessGrantedPlayers;
+    }
+
+    public boolean isFrozen() {
+        return frozen;
+    }
+
+    public void setFrozen(boolean frozen) {
+        this.frozen = frozen;
     }
 }
