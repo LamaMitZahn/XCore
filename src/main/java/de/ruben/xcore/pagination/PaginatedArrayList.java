@@ -15,21 +15,20 @@ public class PaginatedArrayList {
 
     private static final ArrayList<Object> EMPTY_LIST = new ArrayList<>(0);
 
-    private List<Object> list;
+    private final List<Object> list;
 
     private List<Object> page;
 
-    private int pageSize;
+    private final int pageSize;
 
     private int index;
 
     /**
-     * @param pageSize
      */
     public PaginatedArrayList(int pageSize) {
         this.pageSize = pageSize;
         this.index = 0;
-        this.list = new ArrayList<Object>();
+        this.list = new ArrayList<>();
         repaginate();
     }
 
@@ -110,7 +109,7 @@ public class PaginatedArrayList {
     }
 
     @SuppressWarnings("unchecked")
-    public Object[] toArray(Object a[]) {
+    public Object[] toArray(Object[] a) {
         return page.toArray(a);
     }
 

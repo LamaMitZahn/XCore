@@ -37,9 +37,7 @@ public class AdminProfileCommand implements CommandExecutor {
                     return true;
                 }
 
-                new ProfileService().getProfileAsync(offlinePlayer.getUniqueId(), playerProfile -> {
-                    new ProfileGui(player, offlinePlayer.getUniqueId());
-                });
+                new ProfileService().getProfileAsync(offlinePlayer.getUniqueId(), playerProfile -> new ProfileGui(player, offlinePlayer.getUniqueId()));
 
             }else{
                 player.sendMessage(messageService.getMessage("prefix")+"§7Benutze: §b/adminprofile §7<§bSpieler§7>");

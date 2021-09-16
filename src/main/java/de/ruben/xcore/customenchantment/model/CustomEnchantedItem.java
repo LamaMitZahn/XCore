@@ -2,16 +2,11 @@ package de.ruben.xcore.customenchantment.model;
 
 import de.ruben.xcore.customenchantment.XEnchantment;
 import de.tr7zw.nbtapi.NBTItem;
-import dev.triumphteam.gui.builder.item.ItemBuilder;
 import net.kyori.adventure.text.Component;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +16,7 @@ import java.util.stream.Collectors;
 public class CustomEnchantedItem {
 
     private ItemStack itemStack;
-    private NBTItem nbtItem;
+    private final NBTItem nbtItem;
 
     public CustomEnchantedItem(ItemStack itemStack) {
         this.itemStack = itemStack;
@@ -33,9 +28,7 @@ public class CustomEnchantedItem {
 
 
          nbtItem.getKeys().stream().filter(s -> s.startsWith("Enchantment_"))
-                .map(s -> {
-                    return Map.entry(CustomEnchantment.getByKey().get(s.replace("Enchantment_", "")), nbtItem.getInteger(s));
-                })
+                .map(s -> Map.entry(CustomEnchantment.getByKey().get(s.replace("Enchantment_", "")), nbtItem.getInteger(s)))
                 .forEach(classIntegerEntry -> map.put(classIntegerEntry.getKey(), classIntegerEntry.getValue()));
 
          return map;
@@ -82,13 +75,13 @@ public class CustomEnchantedItem {
                     int startIndex = oldLore.indexOf("§0 ")+1;
                     if(oldLore.size() < startIndex) {
                         List<String> subList = oldLore.subList(startIndex, oldLore.size());
-                        newLore.addAll(subList.stream().map(s -> Component.text(s)).collect(Collectors.toList()));
+                        newLore.addAll(subList.stream().map(Component::text).collect(Collectors.toList()));
                     }
                 }else {
                     if(oldLore.size() == 1 && oldLore.get(0).equals(" ")) {
 
                     }else{
-                        newLore.addAll(oldLore.stream().map(s -> Component.text(s)).collect(Collectors.toList()));
+                        newLore.addAll(oldLore.stream().map(Component::text).collect(Collectors.toList()));
                     }
                 }
             }

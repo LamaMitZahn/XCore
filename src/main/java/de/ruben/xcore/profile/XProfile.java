@@ -28,9 +28,9 @@ public class XProfile implements SubSystem {
 
     @Override
     public void onEnable(){
-        this.instance = this;
-        this.mongoDBStorage = new MongoDBStorage(XDevApi.getInstance(), "localhost", "Profile", 27017, MongoClientOptions.builder().codecRegistry(MongoClient.getDefaultCodecRegistry()).build());
-//        this.mongoDBStorage = new MongoDBStorage(XDevApi.getInstance(), 10, "localhost", "Currency", 27017, "currency", "wrgO4FTbV6UyLwtMzfsp", MongoClientOptions.builder().codecRegistry(CodecRegistries.fromRegistries(MongoClient.getDefaultCodecRegistry(), CodecRegistries.fromCodecs(new TransactionCodec()))).build());
+        instance = this;
+//        this.mongoDBStorage = new MongoDBStorage(XDevApi.getInstance(), "localhost", "Profile", 27017, MongoClientOptions.builder().codecRegistry(MongoClient.getDefaultCodecRegistry()).build());
+        this.mongoDBStorage = new MongoDBStorage(XDevApi.getInstance(), 10, "localhost", "Currency", 27017, "currency", "wrgO4FTbV6UyLwtMzfsp", MongoClientOptions.builder().codecRegistry(CodecRegistries.fromRegistries(MongoClient.getDefaultCodecRegistry(), CodecRegistries.fromCodecs(new TransactionCodec()))).build());
 
         mongoDBStorage.connect();
 
@@ -49,7 +49,7 @@ public class XProfile implements SubSystem {
     public void onDisable(){
         ProfileService profileService = new ProfileService();
 
-        profileService.getCache().keys().forEach(uuid -> profileService.pushProfile(uuid));
+        profileService.getCache().keys().forEach(profileService::pushProfile);
 
         mongoDBStorage.disconnect();
         profileCache.close();

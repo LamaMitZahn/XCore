@@ -8,13 +8,13 @@ import org.bukkit.entity.Player;
 
 public class ScoreboardUpdateThread extends Thread{
 
-    int interval = 20*3;
+    final int interval = 20*3;
 
     @Override
     public void run() {
         while (true){
             try {
-                sleep(interval*50);
+                sleep(interval* 50L);
                 for(Player player : Bukkit.getOnlinePlayers()){
                     if(XDevApi.getInstance().getLabyUsers().isLabyUser(player.getUniqueId())){
                         XDevApi.getInstance().getLabyModDisplay().getEconomyDisplay().updateBalanceDisplay(player, EconomyDisplay.EnumBalanceType.CASH,  Math.round(XCurrency.getInstance().getCashService().getValue(player.getUniqueId()).intValue()));

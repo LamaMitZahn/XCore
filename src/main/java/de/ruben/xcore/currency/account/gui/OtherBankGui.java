@@ -58,7 +58,7 @@ public class OtherBankGui extends Gui {
                         }
 
                         if(input != null && !input.equals("") && !input.equals(" ")) {
-                            if (!isDouble(input)) {
+                            if (isDouble(input)) {
                                 player1.sendMessage(XDevApi.getInstance().getMessages().getMessage("prefix") + "§cFehler: §7Du musst eine Zahl als Betrag angeben!");
                                 return;
                             }
@@ -150,7 +150,7 @@ public class OtherBankGui extends Gui {
                         }
 
                         if(input != null && !input.equals("") && !input.equals(" ")) {
-                            if (!isDouble(input)) {
+                            if (isDouble(input)) {
                                 player1.sendMessage(XDevApi.getInstance().getMessages().getMessage("prefix") + "§cFehler: §7Du musst eine Zahl als Betrag angeben!");
                                 return;
                             }
@@ -204,13 +204,9 @@ public class OtherBankGui extends Gui {
 
         }));
 
-        this.setItem(27, ItemPreset.backItem(inventoryClickEvent -> {
-            new BankGui((Player) player).open(player);
-        }));
+        this.setItem(27, ItemPreset.backItem(inventoryClickEvent -> new BankGui((Player) player).open(player)));
 
-        this.setItem(31, ItemPreset.closeItem(inventoryClickEvent -> {
-            this.close(player);
-        }));
+        this.setItem(31, ItemPreset.closeItem(inventoryClickEvent -> this.close(player)));
     }
 
     @Override
@@ -244,13 +240,11 @@ public class OtherBankGui extends Gui {
         bankAccount1.setTransactions(Lists.reverse(Lists.reverse(transactions).stream().limit(10).collect(Collectors.toList())));
         bankAccount1.setValue(bankAccount1.getValue()-aDouble);
 
-        XCurrency.getInstance().getBankService().updateBankAccount(targetUUID, bankAccount1, bankAccount -> {
-            XCurrency.getInstance().getCashService().addValue(player.getUniqueId(), aDouble, cashAccount2 -> {
-                player.sendMessage(XDevApi.getInstance().getMessages().getMessage("prefix")+"§7Du hast dir erfolgreich §b"+XDevApi.getInstance().getxUtil().getStringUtil().moneyFormat(aDouble)+"€ §7aus dem Konto von §b"+Bukkit.getOfflinePlayer(targetUUID).getName()+" §7ausgezahlt!");
-                if(Bukkit.getOfflinePlayer(targetUUID).isOnline()) Bukkit.getPlayer(targetUUID).sendMessage(XDevApi.getInstance().getMessages().getMessage("prefix")+"§b"+player.getName()+" §7hat §b"+XDevApi.getInstance().getxUtil().getStringUtil().moneyFormat(aDouble)+"€ §7von deine Bank abgehoben!");
-                updateTranserrefData(player, aDouble);
-            });
-        });
+        XCurrency.getInstance().getBankService().updateBankAccount(targetUUID, bankAccount1, bankAccount -> XCurrency.getInstance().getCashService().addValue(player.getUniqueId(), aDouble, cashAccount2 -> {
+            player.sendMessage(XDevApi.getInstance().getMessages().getMessage("prefix")+"§7Du hast dir erfolgreich §b"+XDevApi.getInstance().getxUtil().getStringUtil().moneyFormat(aDouble)+"€ §7aus dem Konto von §b"+Bukkit.getOfflinePlayer(targetUUID).getName()+" §7ausgezahlt!");
+            if(Bukkit.getOfflinePlayer(targetUUID).isOnline()) Bukkit.getPlayer(targetUUID).sendMessage(XDevApi.getInstance().getMessages().getMessage("prefix")+"§b"+player.getName()+" §7hat §b"+XDevApi.getInstance().getxUtil().getStringUtil().moneyFormat(aDouble)+"€ §7von deine Bank abgehoben!");
+            updateTranserrefData(player, aDouble);
+        }));
     }
 
     public void updateTranserrefData(Player player, double aDouble) {
@@ -267,9 +261,9 @@ public class OtherBankGui extends Gui {
     private boolean isDouble(String str) {
         try {
             Double.parseDouble(str);
-            return true;
-        } catch (NumberFormatException e) {
             return false;
+        } catch (NumberFormatException e) {
+            return true;
         }
     }
 

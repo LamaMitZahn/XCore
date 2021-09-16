@@ -1,5 +1,6 @@
-package de.ruben.xcore.customenchantment.model;
+package de.ruben.xcore.customenchantment.model.enchantment;
 
+import de.ruben.xcore.customenchantment.model.CustomEnchantment;
 import de.ruben.xdevapi.XDevApi;
 import de.ruben.xdevapi.util.type.StackPile;
 import de.tr7zw.nbtapi.NBTItem;
@@ -14,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,12 +27,12 @@ public class TelekinesisEnchant extends CustomEnchantment {
     }
 
     @Override
-    public @NotNull int getMaxLevel() {
+    public int getMaxLevel() {
         return 1;
     }
 
     @Override
-    public @NotNull int getStarterLevel() {
+    public int getStarterLevel() {
         return 1;
     }
 
@@ -100,14 +100,12 @@ public class TelekinesisEnchant extends CustomEnchantment {
 
             blockBreakEvent.setDropItems(false);
 
-            List<StackPile> stackPile = blockBreakEvent.getBlock().getDrops(blockBreakEvent.getPlayer().getInventory().getItemInMainHand()).stream().map(itemStack -> new StackPile(itemStack)).collect(Collectors.toCollection(ArrayList::new));
+            List<StackPile> stackPile = blockBreakEvent.getBlock().getDrops(blockBreakEvent.getPlayer().getInventory().getItemInMainHand()).stream().map(StackPile::new).collect(Collectors.toCollection(ArrayList::new));
 
-            if(XDevApi.getInstance().getxUtil().getBukkitInventoryUtil().hasStorageContentSpaceFor(blockBreakEvent.getPlayer().getInventory(), stackPile.toArray(new StackPile[stackPile.size()]))){
+            if(XDevApi.getInstance().getxUtil().getBukkitInventoryUtil().hasStorageContentSpaceFor(blockBreakEvent.getPlayer().getInventory(), stackPile.toArray(new StackPile[0]))){
                 blockBreakEvent.getPlayer().getInventory().addItem(blockBreakEvent.getBlock().getDrops(blockBreakEvent.getPlayer().getInventory().getItemInMainHand()).toArray(new ItemStack[stackPile.size()]));
             }else{
-                stackPile.forEach(stackPile1 -> {
-                    blockBreakEvent.getBlock().getWorld().dropItemNaturally(blockBreakEvent.getBlock().getLocation(), stackPile1.getStack());
-                });
+                stackPile.forEach(stackPile1 -> blockBreakEvent.getBlock().getWorld().dropItemNaturally(blockBreakEvent.getBlock().getLocation(), stackPile1.getStack()));
             }
         }
     }

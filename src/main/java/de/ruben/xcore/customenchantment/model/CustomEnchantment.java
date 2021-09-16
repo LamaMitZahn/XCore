@@ -1,20 +1,20 @@
 package de.ruben.xcore.customenchantment.model;
 
 import de.ruben.xcore.customenchantment.model.enchantment.MinerEnchant;
+import de.ruben.xcore.customenchantment.model.enchantment.TelekinesisEnchant;
 import net.kyori.adventure.text.Component;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
 public abstract class CustomEnchantment implements CustomEnchantmentEventReaction{
-    public static final CustomEnchantment TELEKINESIS = new de.ruben.xcore.customenchantment.model.TelekinesisEnchant();
+    public static final CustomEnchantment TELEKINESIS = new TelekinesisEnchant();
     public static final CustomEnchantment MINER = new MinerEnchant();
 
-    private String key;
+    private final String key;
 
     private static final HashMap<String, CustomEnchantment> byKey = new HashMap<>();
 

@@ -180,11 +180,7 @@ public class CashService{
 
         Document document = getMongoDBStorage().getMongoDatabase().getCollection("Data_Cash").find(new Document("_id", uuid)).first();
 
-        if(document == null){
-            return false;
-        }else{
-            return true;
-        }
+        return document != null;
     }
 
     private void existUser(UUID uuid, Consumer<Boolean>  callback){

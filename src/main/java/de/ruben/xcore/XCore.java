@@ -23,12 +23,10 @@ public final class XCore extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.instance = this;
+        instance = this;
         this.subSystems = setSubSystems();
 
-        subSystems.forEach(subSystem -> {
-            subSystem.onEnable();
-        });
+        subSystems.forEach(SubSystem::onEnable);
 
         this.scoreboardThread = new ScoreboardUpdateThread();
         scoreboardThread.start();
@@ -40,12 +38,10 @@ public final class XCore extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        subSystems.forEach(subSystem -> {
-            subSystem.onDisable();
-        });
-
         scoreboardThread.interrupt();
         recentDataUpdateThread.interrupt();
+
+        subSystems.forEach(SubSystem::onDisable);
     }
 
     public static XCore getInstance() {
@@ -61,7 +57,6 @@ public final class XCore extends JavaPlugin {
     }
 
     public List<SubSystem> setSubSystems(){
-        List<SubSystem> subSystems = List.of(new XItemStorage(), new XCurrency(), new XProfile(), new XEnchantment());
-        return subSystems;
+        return List.of(new XItemStorage(), new XCurrency(), new XProfile(), new XEnchantment());
     }
 }

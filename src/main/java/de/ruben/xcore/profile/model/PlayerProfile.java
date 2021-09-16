@@ -1,10 +1,8 @@
 package de.ruben.xcore.profile.model;
 
-import de.ruben.xcore.currency.account.type.Transaction;
 import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.UUID;
 
 public class PlayerProfile {

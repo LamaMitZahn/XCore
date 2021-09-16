@@ -23,9 +23,7 @@ import java.util.UUID;
 
 public class OtherBanksGui extends Gui {
 
-    private BankAccount bankAccount;
-
-    private PaginatedArrayList paginatedArrayList;
+    private final PaginatedArrayList paginatedArrayList;
 
     public OtherBanksGui(Player player, BankAccount bankAccount) {
 
@@ -35,15 +33,12 @@ public class OtherBanksGui extends Gui {
                 Set.of(InteractionModifier.PREVENT_ITEM_PLACE, InteractionModifier.PREVENT_ITEM_SWAP, InteractionModifier.PREVENT_ITEM_TAKE)
         );
 
-        this.bankAccount = bankAccount;
         this.paginatedArrayList = new PaginatedArrayList(bankAccount.getAccessGrantedAccounts(), 27);
 
         this.disableAllInteractions();
         this.getFiller().fillBorder(ItemPreset.fillItem(inventoryClickEvent -> {}));
 
-        this.setItem((this.getRows()*9)-9, ItemPreset.backItem(inventoryClickEvent -> {
-            new BankGui(player).open(player);
-        }));
+        this.setItem((this.getRows()*9)-9, ItemPreset.backItem(inventoryClickEvent -> new BankGui(player).open(player)));
 
         this.setItem((this.getRows()*9)-5, ItemPreset.closeItem(inventoryClickEvent -> this.close(player)));
     }
@@ -119,11 +114,4 @@ public class OtherBanksGui extends Gui {
 
     }
 
-    //        public int getRows(BankAccount bankAccount){
-//            return Double.valueOf(Math.ceil(bankAccount.getAccessGrantedAccounts().size()/9)).intValue()<=5 ? Double.valueOf(Math.ceil(bankAccount.getAccessGrantedAccounts().size()/9)).intValue()+1 : 6;
-//        }
-//
-//        private int getPageSize(BankAccount bankAccount){
-//            return bankAccount.getAccessGrantedAccounts().size()<=45 ? bankAccount.getAccessGrantedPlayers().size() : 45;
-//        }
 }

@@ -1,9 +1,7 @@
 package de.ruben.xcore.currency.account.type;
 
 import de.ruben.xdevapi.XDevApi;
-import de.ruben.xdevapi.util.StringUtil;
 import org.bson.Document;
-import org.bson.types.ObjectId;
 import org.bukkit.Bukkit;
 
 import java.text.DateFormat;
@@ -13,7 +11,7 @@ import java.util.UUID;
 
 public class Transaction {
 
-    private final DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy hh:mm");
+    private final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm");
 
     private boolean positive;
     private double amount;
@@ -67,9 +65,9 @@ public class Transaction {
         String transactionMadeBy = displayed.toString().equals(getTransactionMadeBy().toString()) ? "Du" : Bukkit.getOfflinePlayer(getTransactionMadeBy()).getName();
         String amountString = positive ? "§a+"+XDevApi.getInstance().getxUtil().getStringUtil().moneyFormat(amount) : "§c-"+XDevApi.getInstance().getxUtil().getStringUtil().moneyFormat(amount);
 
-        Long seconds = (System.currentTimeMillis()-getDate().getTime())/1000;
+        long seconds = (System.currentTimeMillis()-getDate().getTime())/1000;
 
-        String timeString = XDevApi.getInstance().getxUtil().getGlobal().getTimeUtil().convertSecondsHM(seconds.intValue());
+        String timeString = XDevApi.getInstance().getxUtil().getGlobal().getTimeUtil().convertSecondsHM((int) seconds);
 
         timeString = timeString.startsWith(" ") ? timeString : " "+timeString;
         return amountString+" §8("+transactionMadeBy+" vor"+timeString+")";

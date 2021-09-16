@@ -117,9 +117,8 @@ public class AdminCashCommands implements CommandExecutor {
                 }
 
             }else if(args.length == 3){
+                String targetName = args[1];
                 if(args[0].equalsIgnoreCase("privateCash")){
-                    String targetName = args[1];
-
                     OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(targetName);
 
                     if(offlinePlayer == null){
@@ -128,7 +127,7 @@ public class AdminCashCommands implements CommandExecutor {
                     }
                     String bool = args[2];
 
-                    boolean privateCash = true;
+                    boolean privateCash;
 
                     if(bool.equalsIgnoreCase("false")){
                         privateCash = false;
@@ -145,7 +144,6 @@ public class AdminCashCommands implements CommandExecutor {
                         if(offlinePlayer.isOnline()) Bukkit.getPlayer(offlinePlayer.getUniqueId()).sendMessage(messageService.getMessage("prefix")+"§b"+commandSender.getName()+" §7hat deine Brieftasche auf §b"+ privacyState +" §7gestellt!");
                     });
                 }else if(args[0].equalsIgnoreCase("frozen")){
-                    String targetName = args[1];
 
                     OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(targetName);
 
@@ -155,15 +153,11 @@ public class AdminCashCommands implements CommandExecutor {
                     }
                     String bool = args[2];
 
-                    boolean frozen = true;
+                    boolean frozen;
 
                     if(bool.equalsIgnoreCase("false")){
                         frozen = false;
-                    }else if(bool.equalsIgnoreCase("true")){
-                        frozen = true;
-                    }else{
-                        frozen = false;
-                    }
+                    }else frozen = bool.equalsIgnoreCase("true");
 
                     boolean finalFrozen = frozen;
                     XCurrency.getInstance().getBankService().setFrozen(offlinePlayer.getUniqueId(), frozen, bankAccount -> {

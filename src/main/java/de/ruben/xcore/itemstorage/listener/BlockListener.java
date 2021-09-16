@@ -25,6 +25,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -79,11 +80,7 @@ public class BlockListener implements Listener {
                     return;
                 }
 
-                CompletableFuture.supplyAsync(() -> new BarrelStorage().fromContainer(tileState.getPersistentDataContainer()), executorService).thenAccept(barrelStorage -> {
-                    Bukkit.getScheduler().runTask(XCore.getInstance(), () ->  {
-                        block.getWorld().dropItem(block.getLocation(), barrelStorageService.getBarrelStorageItem(barrelStorage));
-                    });
-                });
+                CompletableFuture.supplyAsync(() -> new BarrelStorage().fromContainer(tileState.getPersistentDataContainer()), executorService).thenAccept(barrelStorage -> Bukkit.getScheduler().runTask(XCore.getInstance(), () -> block.getWorld().dropItem(block.getLocation(), barrelStorageService.getBarrelStorageItem(barrelStorage))));
             }
         }
 
@@ -113,7 +110,7 @@ public class BlockListener implements Listener {
                                 return;
                             }else {
                                 persistentDataContainer.set(new NamespacedKey(XCore.getInstance(), "isOpened"), PersistentDataType.STRING, player.getName());
-                                Bukkit.getScheduler().runTask(XCore.getInstance(), () -> tileState.update());
+                                Bukkit.getScheduler().runTask(XCore.getInstance(), (@NotNull Runnable) tileState::update);
                             }
                         }
 

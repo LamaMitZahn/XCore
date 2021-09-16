@@ -5,7 +5,6 @@ import de.ruben.xcore.customenchantment.model.CustomEnchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class EventListener implements Listener {
 
@@ -16,7 +15,8 @@ public class EventListener implements Listener {
 
             if(customEnchantedItem.hasCustomEnchantment(CustomEnchantment.TELEKINESIS)){
                 CustomEnchantment.TELEKINESIS.handleEvent(event, customEnchantedItem.getCustomEnchantmentLevel(CustomEnchantment.TELEKINESIS));
-            }else if(customEnchantedItem.hasCustomEnchantment(CustomEnchantment.MINER)){
+            }
+            if(customEnchantedItem.hasCustomEnchantment(CustomEnchantment.MINER)){
                 CustomEnchantment.MINER.handleEvent(event, customEnchantedItem.getCustomEnchantmentLevel(CustomEnchantment.MINER));
             }
         }

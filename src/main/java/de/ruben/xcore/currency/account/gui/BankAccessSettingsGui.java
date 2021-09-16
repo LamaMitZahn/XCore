@@ -26,8 +26,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class BankAccessSettingsGui extends Gui {
-    private Player player;
-    private PaginatedArrayList paginatedArrayList;
+    private final PaginatedArrayList paginatedArrayList;
 
 
     public BankAccessSettingsGui(Player player, BankAccount bankAccount) {
@@ -35,18 +34,13 @@ public class BankAccessSettingsGui extends Gui {
 
         this.disableAllInteractions();
 
-        this.player = player;
         this.paginatedArrayList = new PaginatedArrayList(bankAccount.getAccessGrantedPlayers(),27);
 
         this.getFiller().fillBorder(ItemPreset.fillItem(inventoryClickEvent -> {}));
 
-        this.setItem(45, ItemPreset.backItem(inventoryClickEvent -> {
-            new MyBankGui(player, bankAccount).open(player);
-        }));
+        this.setItem(45, ItemPreset.backItem(inventoryClickEvent -> new MyBankGui(player, bankAccount).open(player)));
 
-        this.setItem(49, ItemPreset.closeItem(inventoryClickEvent -> {
-            this.close(player);
-        }));
+        this.setItem(49, ItemPreset.closeItem(inventoryClickEvent -> this.close(player)));
 
         this.setItem(53, ItemBuilder.from(Material.ANVIL)
                 .name(Component.text("§bSpieler hinzufügen"))
@@ -102,16 +96,14 @@ public class BankAccessSettingsGui extends Gui {
                             });
                         }else{
                             NoLabyGUITemplate.createStringInput(XDevApi.getInstance(), "§9Name des Spielers.", "Name", s -> {
-                                String input = s;
-                                if(input == null || input.equals("") || input.equals(" ")) return AnvilGUI.Response.close();
+                                if(s == null || s.equals("") || s.equals(" ")) return AnvilGUI.Response.close();
 
-                                if(input.equals(player.getName())){
+                                if(s.equals(player.getName())){
                                     player.sendMessage(XDevApi.getInstance().getMessages().getMessage("prefix") + "§cFehler: §7Du kannst dich nicht selber auf die Zugriffsliste deines Kontos hinzufügen!");
                                     return AnvilGUI.Response.close();
                                 }
 
-                                String finalInput = input;
-                                XCurrency.getInstance().getBankService().existUser(Bukkit.getOfflinePlayer(input).getUniqueId(), (bankAccount1, aBoolean) -> {
+                                XCurrency.getInstance().getBankService().existUser(Bukkit.getOfflinePlayer(s).getUniqueId(), (bankAccount1, aBoolean) -> {
                                     if(aBoolean){
 
                                         NoLabyGUITemplate.createStandardSelectConfirmationGUI(player, ((gui, confirmationResponse, player2) -> {
@@ -122,13 +114,13 @@ public class BankAccessSettingsGui extends Gui {
                                                 gui.close(player2);
 
                                                 if(bankAccount1.getAccessGrantedAccounts().contains(player2.getUniqueId())){
-                                                    player2.sendMessage(XDevApi.getInstance().getMessages().getMessage("prefix") + "§b" + Bukkit.getOfflinePlayer(finalInput).getName() + " §7ist bereits auf deiner Zugriffsliste!");
+                                                    player2.sendMessage(XDevApi.getInstance().getMessages().getMessage("prefix") + "§b" + Bukkit.getOfflinePlayer(s).getName() + " §7ist bereits auf deiner Zugriffsliste!");
                                                 }else {
-                                                    XCurrency.getInstance().getBankService().addAccessGrantedAccount(Bukkit.getOfflinePlayer(finalInput).getUniqueId(), player2.getUniqueId());
-                                                    XCurrency.getInstance().getBankService().addAccessGrantedPlayer(player2.getUniqueId(), Bukkit.getOfflinePlayer(finalInput).getUniqueId());
+                                                    XCurrency.getInstance().getBankService().addAccessGrantedAccount(Bukkit.getOfflinePlayer(s).getUniqueId(), player2.getUniqueId());
+                                                    XCurrency.getInstance().getBankService().addAccessGrantedPlayer(player2.getUniqueId(), Bukkit.getOfflinePlayer(s).getUniqueId());
 
-                                                    player2.sendMessage(XDevApi.getInstance().getMessages().getMessage("prefix") + "§7Du hast §b" + Bukkit.getOfflinePlayer(finalInput).getName() + " §7erfolgreich zu deiner Zugriffsliste hinzugefügt!");
-                                                    if(Bukkit.getOfflinePlayer(finalInput).isOnline()) Bukkit.getPlayer(finalInput).sendMessage(XDevApi.getInstance().getMessages().getMessage("prefix") + "§7Du wurdest von §b"+player2.getName()+" §7zu seiner Bank-Zugriffsliste hinzugefügt!");
+                                                    player2.sendMessage(XDevApi.getInstance().getMessages().getMessage("prefix") + "§7Du hast §b" + Bukkit.getOfflinePlayer(s).getName() + " §7erfolgreich zu deiner Zugriffsliste hinzugefügt!");
+                                                    if(Bukkit.getOfflinePlayer(s).isOnline()) Bukkit.getPlayer(s).sendMessage(XDevApi.getInstance().getMessages().getMessage("prefix") + "§7Du wurdest von §b"+player2.getName()+" §7zu seiner Bank-Zugriffsliste hinzugefügt!");
 
                                                 }
                                             }
@@ -174,13 +166,11 @@ public class BankAccessSettingsGui extends Gui {
                             NoLabyGUITemplate.createStandardSelectConfirmationGUI(player, "§9§l"+Bukkit.getOfflinePlayer(uuid1).getName()+" Entfernen?", (gui, confirmationResponse, player1) -> {
                                 if(confirmationResponse == ConfirmationResponse.YES){
                                     gui.close(player1);
-                                    XCurrency.getInstance().getBankService().removeAccessGrantedAccount(uuid1, player1.getUniqueId(), bankAccount -> {
-                                        XCurrency.getInstance().getBankService().removeAccessGrantedPlayer(player1.getUniqueId(), uuid1, bankAccount1 -> {
-                                            player1.sendMessage(XDevApi.getInstance().getMessages().getMessage("prefix") + "§7Du hast §b"+Bukkit.getOfflinePlayer(uuid1).getName()+" §7erfolgreich aus der Zugriffsliste deines Kontos entfernt!");
-                                            if(Bukkit.getOfflinePlayer(uuid1).isOnline()) Bukkit.getPlayer(uuid1).sendMessage(XDevApi.getInstance().getMessages().getMessage("prefix") + "§7Du wurdest von §b"+player1.getName()+" §7aus seiner Bank-Zugriffsliste entfernt!");
+                                    XCurrency.getInstance().getBankService().removeAccessGrantedAccount(uuid1, player1.getUniqueId(), bankAccount -> XCurrency.getInstance().getBankService().removeAccessGrantedPlayer(player1.getUniqueId(), uuid1, bankAccount1 -> {
+                                        player1.sendMessage(XDevApi.getInstance().getMessages().getMessage("prefix") + "§7Du hast §b"+Bukkit.getOfflinePlayer(uuid1).getName()+" §7erfolgreich aus der Zugriffsliste deines Kontos entfernt!");
+                                        if(Bukkit.getOfflinePlayer(uuid1).isOnline()) Bukkit.getPlayer(uuid1).sendMessage(XDevApi.getInstance().getMessages().getMessage("prefix") + "§7Du wurdest von §b"+player1.getName()+" §7aus seiner Bank-Zugriffsliste entfernt!");
 
-                                        });
-                                    });
+                                    }));
                                 }else if(confirmationResponse == ConfirmationResponse.NO){
                                     gui.close(player1);
                                     player1.closeInventory();

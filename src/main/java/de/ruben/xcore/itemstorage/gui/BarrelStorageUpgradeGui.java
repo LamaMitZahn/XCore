@@ -6,11 +6,8 @@ import de.ruben.xcore.itemstorage.model.BarrelStorage;
 import de.ruben.xcore.itemstorage.service.BarrelStorageService;
 import de.ruben.xdevapi.XDevApi;
 import de.ruben.xdevapi.custom.gui.ItemPreset;
-import de.ruben.xdevapi.custom.gui.NoLabyGUITemplate;
 import de.ruben.xdevapi.message.MessageService;
-import dev.triumphteam.gui.builder.item.BaseItemBuilder;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
-import dev.triumphteam.gui.components.InteractionModifier;
 import dev.triumphteam.gui.guis.Gui;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -22,12 +19,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
 public class BarrelStorageUpgradeGui extends Gui {
-    private final BarrelStorageService barrelStorageService = new BarrelStorageService();
 
     private final MessageService messageService = XDevApi.getInstance().getMessageService();
 
@@ -47,6 +42,7 @@ public class BarrelStorageUpgradeGui extends Gui {
             this.close(player);
         }));
 
+        BarrelStorageService barrelStorageService = new BarrelStorageService();
         this.setItem(20, ItemBuilder.from(barrelStorageService.forUpgradeNeededStacks(barrelStorage.getLevel()+1)).asGuiItem(inventoryClickEvent -> inventoryClickEvent.setCancelled(true)));
 
         this.setItem(24, ItemBuilder.from(Material.GREEN_WOOL)

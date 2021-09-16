@@ -15,7 +15,7 @@ public class XItemStorage implements SubSystem {
 
     @Override
     public void onEnable(){
-        this.instance = this;
+        instance = this;
         this.executorService = new ThreadPoolExecutor(
                 1,
                 5,

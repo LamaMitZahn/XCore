@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 
 public class ProfileService {
 
-    private String collection = "Data_Profile";
+    private final String collection = "Data_Profile";
 
     public ProfileService() {
     }

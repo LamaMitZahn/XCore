@@ -1,12 +1,8 @@
 package de.ruben.xcore.thread;
 
-import de.ruben.xcore.XCore;
 import de.ruben.xcore.profile.model.PlayerProfile;
 import de.ruben.xcore.profile.service.ProfileService;
 import de.ruben.xdevapi.XDevApi;
-import de.ruben.xdevapi.labymod.display.EconomyDisplay;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.Map;
 import java.util.UUID;
@@ -14,9 +10,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class RecentDataUpdateThread extends Thread{
 
-    int interval = 20*10;
+    final int interval = 20*10;
 
-    ProfileService profileService = new ProfileService();
+    final ProfileService profileService = new ProfileService();
 
     private final Map<UUID, PlayerProfile> updatesMap;
 
@@ -28,10 +24,8 @@ public class RecentDataUpdateThread extends Thread{
     public void run() {
         while (true){
             try {
-                sleep(interval*50);
-                getUpdatesMap().keySet().forEach(uuid -> {
-                    profileService.pushProfile(uuid);
-                });
+                sleep(interval* 50L);
+                getUpdatesMap().keySet().forEach(uuid -> profileService.pushProfile(uuid));
             } catch (InterruptedException e) {
                 XDevApi.getInstance().consoleMessage("RecentDataUpdateThread interrupted!", true);
             }

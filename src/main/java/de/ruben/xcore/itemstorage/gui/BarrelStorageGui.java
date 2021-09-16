@@ -69,7 +69,7 @@ public class BarrelStorageGui extends Gui {
             CompletableFuture.runAsync(() -> {
                 PersistentDataContainer persistentDataContainer = tileState.getPersistentDataContainer();
 
-                if(removeOpener.get()==true){
+                if(removeOpener.get()){
                     if(persistentDataContainer.has(new NamespacedKey(XCore.getInstance(), "isOpened"), PersistentDataType.STRING)) {
                         persistentDataContainer.remove(new NamespacedKey(XCore.getInstance(), "isOpened"));
                     }
@@ -92,9 +92,7 @@ public class BarrelStorageGui extends Gui {
                 barrelStorage.setPages(pageMap);
 
                 persistentDataContainer = barrelStorage.updateBarrel(persistentDataContainer);
-            }, executorService).thenAccept(unused -> {
-                Bukkit.getScheduler().runTask(XCore.getInstance(), () -> tileState.update());
-            });
+            }, executorService).thenAccept(unused -> Bukkit.getScheduler().runTask(XCore.getInstance(), (@NotNull Runnable) tileState::update));
         });
 
 
@@ -104,26 +102,22 @@ public class BarrelStorageGui extends Gui {
 
     public void open(@NotNull Player player, BarrelStorage barrelStorage, int page) {
 
-        CompletableFuture.runAsync(() -> {
-            Arrays.stream(barrelStorage.getPages().get(page).getItemStacksArray()).forEach(itemStack -> {
-                if (itemStack != null && itemStack.getType() != Material.AIR && itemStack.hasItemMeta()) {
-                    ItemMeta itemMeta = itemStack.getItemMeta();
+        CompletableFuture.runAsync(() -> Arrays.stream(barrelStorage.getPages().get(page).getItemStacksArray()).forEach(itemStack -> {
+            if (itemStack != null && itemStack.getType() != Material.AIR && itemStack.hasItemMeta()) {
+                ItemMeta itemMeta = itemStack.getItemMeta();
 
-                    PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
+                PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
 
-                    persistentDataContainer.remove(new NamespacedKey(XCore.getInstance(), "mf-gui"));
+                persistentDataContainer.remove(new NamespacedKey(XCore.getInstance(), "mf-gui"));
 
-                    itemStack.setItemMeta(itemMeta);
-                }
+                itemStack.setItemMeta(itemMeta);
+            }
 
-                this.addItem(ItemBuilder.from(itemStack).asGuiItem());
-            });
-        }, executorService).thenAccept(unused -> {
-            Bukkit.getScheduler().runTask(XCore.getInstance(), () -> {
-                this.update();
-                super.open(player);
-            });
-        });
+            this.addItem(ItemBuilder.from(itemStack).asGuiItem());
+        }), executorService).thenAccept(unused -> Bukkit.getScheduler().runTask(XCore.getInstance(), () -> {
+            this.update();
+            super.open(player);
+        }));
 
 
     }

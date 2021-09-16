@@ -36,9 +36,7 @@ public class BankGui extends Gui {
                         Component.text("§7auf sie zugreifen."),
                         Component.text(" ")
                 ))
-                .asGuiItem(inventoryClickEvent -> {
-                    new OtherBanksGui(player, bankAccount).open(player, 0);
-                });
+                .asGuiItem(inventoryClickEvent -> new OtherBanksGui(player, bankAccount).open(player, 0));
 
         GuiItem myBank = ItemBuilder.from(Material.GOLD_INGOT)
                 .name(Component.text("§bDeine Bank"))

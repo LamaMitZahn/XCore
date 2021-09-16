@@ -1,21 +1,14 @@
 package de.ruben.xcore.itemstorage.command;
 
-import com.google.gson.Gson;
 import de.ruben.xcore.itemstorage.gui.items.StorageUpdateItemPreset;
-import de.ruben.xcore.itemstorage.model.BarrelStorage;
-import de.ruben.xcore.itemstorage.model.Page;
 import de.ruben.xcore.itemstorage.service.BarrelStorageService;
 import de.ruben.xdevapi.XDevApi;
 import de.ruben.xdevapi.message.MessageService;
-import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.HashMap;
 
 public class AdminStorageCommand implements CommandExecutor {
 

@@ -122,9 +122,7 @@ public class BankService {
         getAccountAsync(uuid, bankAccount -> {
             List<UUID> accessGrantedPlayers = bankAccount.getAccessGrantedPlayers();
 
-            if(accessGrantedPlayers.contains(playerUUID)){
-                accessGrantedPlayers.remove(playerUUID);
-            }
+            accessGrantedPlayers.remove(playerUUID);
 
             bankAccount.setAccessGrantedPlayers(accessGrantedPlayers);
 
@@ -180,9 +178,7 @@ public class BankService {
         getAccountAsync(uuid, bankAccount -> {
             List<UUID> accessGrantedAccounts = bankAccount.getAccessGrantedAccounts();
 
-            if(accessGrantedAccounts.contains(accountUUID)){
-                accessGrantedAccounts.remove(accountUUID);
-            }
+            accessGrantedAccounts.remove(accountUUID);
 
             bankAccount.setAccessGrantedAccounts(accessGrantedAccounts);
             System.out.println("Ausgeführt! : "+bankAccount.getAccessGrantedAccounts());
@@ -319,7 +315,7 @@ public class BankService {
             if(bankAccount.getValue() != null) document.append("value", bankAccount.getValue());
 
             if(bankAccount.getTransactions() != null){
-                List<Document> docList = bankAccount.getTransactions().stream().map(transaction -> transaction.toDocument()).collect(Collectors.toList());
+                List<Document> docList = bankAccount.getTransactions().stream().map(Transaction::toDocument).collect(Collectors.toList());
                 document.append("transactions", docList);
             };
             if(bankAccount.getAccessGrantedAccounts() != null) document.append("accessGrantedAccounts", bankAccount.getAccessGrantedAccounts());
@@ -346,7 +342,7 @@ public class BankService {
             if(bankAccount.getValue() != null) document.append("value", bankAccount.getValue());
 
             if(bankAccount.getTransactions() != null){
-                List<Document> docList = bankAccount.getTransactions().stream().map(transaction -> transaction.toDocument()).collect(Collectors.toList());
+                List<Document> docList = bankAccount.getTransactions().stream().map(Transaction::toDocument).collect(Collectors.toList());
                 document.append("transactions", docList);
             };
             if(bankAccount.getAccessGrantedAccounts() != null) document.append("accessGrantedAccounts", bankAccount.getAccessGrantedAccounts());
@@ -420,22 +416,20 @@ public class BankService {
         if(getCache().containsKey(uuid)){
             callback.accept(getCache().get(uuid), true);
         }else{
-            XDevApi.getInstance().getxScheduler().async(() -> {
-                getMongoDBStorage().getDocumentByBson("Data_Bank", new Document("_id", uuid)).thenAccept(document -> {
-                    if(document == null){
-                        callback.accept(null, false);
-                    }else{
+            XDevApi.getInstance().getxScheduler().async(() -> getMongoDBStorage().getDocumentByBson("Data_Bank", new Document("_id", uuid)).thenAccept(document -> {
+                if(document == null){
+                    callback.accept(null, false);
+                }else{
 
-                        List<Document> docList = document.getList("transactions", Document.class);
+                    List<Document> docList = document.getList("transactions", Document.class);
 
-                        List<Transaction> transactions = docList.stream().map(document1 -> new Transaction().fromDocument(document1)).collect(Collectors.toList());
+                    List<Transaction> transactions = docList.stream().map(document1 -> new Transaction().fromDocument(document1)).collect(Collectors.toList());
 
-                        BankAccount bankAccount = new BankAccount(document.getDouble("value"), transactions, document.getList("accessGrantedAccounts", UUID.class), document.getList("accessGrantedPlayers", UUID.class), document.getBoolean("frozen"));
+                    BankAccount bankAccount = new BankAccount(document.getDouble("value"), transactions, document.getList("accessGrantedAccounts", UUID.class), document.getList("accessGrantedPlayers", UUID.class), document.getBoolean("frozen"));
 
-                        callback.accept(bankAccount, true);
-                    }
-                });
-            });
+                    callback.accept(bankAccount, true);
+                }
+            }));
         }
     }
 

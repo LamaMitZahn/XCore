@@ -8,9 +8,7 @@ import de.ruben.xdevapi.XDevApi;
 import de.ruben.xdevapi.util.type.StackPile;
 import dev.triumphteam.gui.builder.item.ItemBuilder;
 import dev.triumphteam.gui.guis.Gui;
-import dev.triumphteam.gui.guis.GuiItem;
 import net.kyori.adventure.text.Component;
-import net.minecraft.server.v1_16_R3.TileEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -22,7 +20,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.sql.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -80,29 +77,8 @@ public class BarrelStorageService {
             }
         }
 
-        return stackList.toArray(new ItemStack[stackList.size()]);
+        return stackList.toArray(new ItemStack[0]);
     }
-
-//    public List<Map.Entry<Integer, ItemStack>> getItemPlaces(Gui gui, ItemStack[] itemStacks){
-//        List<Map.Entry<Integer, ItemStack>> stackList = new ArrayList<>();
-//        int rows = gui.getRows();
-//        int y = 0;
-//        for(int i = 0; i < rows * 9; ++i) {
-//            if (i <= 8 || i >= rows * 9 - 9 || i == 9 || i == 18 || i == 27 || i == 36 || i == 17 || i == 26 || i == 35 || i == 44) {
-//
-//            }else{
-//                    if(y < itemStacks.length) {
-//                        stackList.add(Map.entry(i, itemStacks[y]));
-//                    }else{
-//                        break;
-//                    }
-//
-//                y++;
-//            }
-//        }
-//
-//        return stackList;
-//    }
 
     public boolean isBarrelStorage(ItemStack itemStack){
         return itemStack.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(XCore.getInstance(), "isBarrelStorage"), PersistentDataType.INTEGER);
@@ -113,7 +89,7 @@ public class BarrelStorageService {
     }
 
     public Integer getSlots(Collection<Page> pages){
-        return pages.stream().map(page -> page.getRows()).collect(Collectors.toList()).stream().mapToInt(value -> value.intValue()).sum()*7;
+        return pages.stream().map(Page::getRows).collect(Collectors.toList()).stream().mapToInt(value -> value).sum()*7;
     }
 
     public BarrelStorage getBarrelStorage(int level){

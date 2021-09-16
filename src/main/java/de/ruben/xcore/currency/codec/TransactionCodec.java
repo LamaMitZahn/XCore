@@ -1,18 +1,11 @@
 package de.ruben.xcore.currency.codec;
 
-import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.DynamicOps;
 import com.mongodb.MongoClient;
 import de.ruben.xcore.currency.account.type.Transaction;
 import org.bson.*;
 import org.bson.codecs.Codec;
-import org.bson.codecs.CollectibleCodec;
 import org.bson.codecs.DecoderContext;
 import org.bson.codecs.EncoderContext;
-import org.bson.types.ObjectId;
-
-import java.util.UUID;
 
 public class TransactionCodec implements Codec<Transaction> {
 
