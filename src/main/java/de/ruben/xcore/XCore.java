@@ -1,5 +1,6 @@
 package de.ruben.xcore;
 
+import de.ruben.xcore.changelog.XChangelog;
 import de.ruben.xcore.currency.XCurrency;
 import de.ruben.xcore.customenchantment.XEnchantment;
 import de.ruben.xcore.itemstorage.XItemStorage;
@@ -57,6 +58,6 @@ public final class XCore extends JavaPlugin {
     }
 
     public List<SubSystem> setSubSystems(){
-        return List.of(new XItemStorage(), new XCurrency(), new XProfile(), new XEnchantment());
+        return List.of(new XItemStorage(), new XCurrency(), new XProfile(), new XEnchantment(), new XChangelog());
     }
 }

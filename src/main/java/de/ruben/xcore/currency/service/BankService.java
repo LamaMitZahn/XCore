@@ -97,10 +97,6 @@ public class BankService {
             accessGrantedPlayers.remove(playerUUID);
         }
 
-        System.out.println("Ausgeführt! : "+bankAccount.getAccessGrantedPlayers());
-
-        System.out.println("Ausgeführt! : "+accessGrantedPlayers);
-
         return updateBankAccount(uuid, bankAccount);
     }
 

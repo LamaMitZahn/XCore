@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 
 public class TelekinesisEnchant extends CustomEnchantment {
 
-
-
     public TelekinesisEnchant() {
         super("telekinesis");
     }
